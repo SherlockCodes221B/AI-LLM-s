@@ -6,8 +6,9 @@ import streamlit as st
 load_dotenv()
 
 st.set_page_config(
-    page_title="Gemini Chatbot test1", page_icon=":beers:", layout="centered"
+    page_title="Gemini Chatbot", page_icon=":beers:", layout="centered"
 )
+st.header("Google Gemini chatbot")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 genai.configure(api_key=GOOGLE_API_KEY)
@@ -23,12 +24,13 @@ def translate_role_for_user(user_role):
 if "chat_session" not in st.session_state:
     st.session_state.chat_session = model.start_chat(history=[])
 
+uploaded_file = st.file_uploader("Choose a file")
+
 for message in st.session_state.chat_session.history:
     with st.chat_message(translate_role_for_user(message.role)):
         st.markdown(message.parts[0].text)
 
-st.header("Google Gemini chatbot with streamlit library")
-prompt = st.chat_input("Hello..👋Have fun while chatting google ")
+prompt = st.chat_input("Hello..👋 Have fun while chatting google ")
 if prompt:
     st.chat_message("user").markdown(prompt)
     gemini_response = st.session_state.chat_session.send_message(prompt)
